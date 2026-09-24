@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIM-CBC | Sistema de Información y Monitoreo de las Condiciones Básicas de Calidad - UPT</title>
+  
+  <!-- Global error catcher for debugging load issues -->
+  <script>
+    // Force unregister any service workers and clear cache storage without infinite reload loops
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var i = 0; i < registrations.length; i++) {
+          registrations[i].unregister();
+        }
+      }).catch(function(e) {});
+    }
+    if (window.caches) {
+      caches.keys().then(function(keys) {
+        keys.forEach(function(key) {
+          caches.delete(key);
+        });
+      }).catch(function(e) {});
+    }
+
+    // Robust fallback wrapper for localStorage in case it is blocked (e.g. Incognito mode)
+    (function() {
+      var storageAvailable = false;
+      try {
+        var testKey = "__storage_test__";
+        window.localStorage.setItem(testKey, testKey);
+        window.localStorage.removeItem(testKey);
+        storageAvailable = true;
+      } catch (e) {
+        storageAvailable = false;
+      }
+
+      if (!storageAvailable) {
+        console.warn("SIGECA: localStorage is blocked or not available. Falling back to in-memory storage.");
+        var memoryStore = {};
+        var mockLocalStorage = {
+          getItem: function(key) {
+            return memoryStore.hasOwnProperty(key) ? memoryStore[key] : null;
+          },
+          setItem: function(key, value) {
+            memoryStore[key] = String(value);
+          },
+          removeItem: function(key) {
+            delete memoryStore[key];
+          },
+          clear: function() {
+            memoryStore = {};
+          },
+          key: function(index) {
+            var keys = Object.keys(memoryStore);
+            return index < keys.length ? keys[index] : null;
+          },
+          get length() {
+            return Object.keys(memoryStore).length;
+          }
+        };
+
+        try {
+          Object.defineProperty(window, 'localStorage', {
+            value: mockLocalStorage,
+            writable: true,
+            configurable: true
+          });
+        } catch (e) {
+          window.localStorage = mockLocalStorage;
+        }
+      }
+    })();
+
+    function reportErrorToServer(type, details) {
+      console.error("[SIGECA ERROR]:", type, details);
+      fetch('/api/log_error', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: type,
+          message: details.message || String(details),
+          source: details.source || '',
+          lineno: details.lineno || 0,
+          colno: details.colno || 0,
+          stack: details.error ? (details.error.stack || '') : '',
+          userAgent: navigator.userAgent,
+          url: window.location.href
+        })
+      }).catch(err => console.warn("Failed to send error to server", err));
+    }
+
+    window.onerror = function(message, source, lineno, colno, error) {
+      reportErrorToServer('window.onerror', {
+        message: message,
+        source: source,
+        lineno: lineno,
+        colno: colno,
+        error: error
+      });
+      var errText = message + "\nArchivo: " + source + "\nLínea: " + lineno + (colno ? "\nColumna: " + colno : "");
+      alert("[SIGECA Error de Carga]\n" + errText);
+      return false;
+    };
+
+    window.addEventListener('unhandledrejection', function(event) {
+      var reason = event.reason;
+      reportErrorToServer('unhandledrejection', {
+        message: reason ? (reason.message || String(reason)) : 'Unknown reason',
+        error: reason
+      });
+      alert("[SIGECA Error de Promesa]\n" + (reason ? (reason.stack || reason) : 'Unknown promise rejection'));
+    });
+
+    // Cargar dinámicamente el test runner de E2E si se solicita en la URL
+    if (window.location.search.includes("run_tests=true")) {
+      const tScript = document.createElement("script");
+      tScript.src = "./test_runner.js?v=" + Date.now();
+      document.head.appendChild(tScript);
+    }
+  </script>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="SIM-CBC | Sistema de Información y Monitoreo de las Condiciones Básicas de Calidad - UPT">
+  <meta name="author" content="SIM-CBC Institucional">
+  
+  <!-- Google Fonts - Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons for premium modern look -->
+  <script src="./lucide.min.js?v=20260623.5"></script>
+  
+  <!-- SheetJS for Excel processing in frontend -->
+  <script src="./xlsx.full.min.js?v=20260623.5"></script>
+  
+  <!-- Preload critical images for instant synchronous display -->
+  <link rel="preload" href="./assets/universidad_privada_de_tacna_logo_transparent.png" as="image">
+  <link rel="preload" href="./assets/universidad_privada_de_tacna_bg.jpg" as="image">
+  
+  <!-- Estilos Globales -->
+  <link rel="stylesheet" href="./index.css?v=20260720.1">
+</head>
+<body>
+  
+  <!-- App Container -->
+  <div id="app" class="app-container">
+    <!-- El enrutador inyectará la vista aquí -->
+    <div class="loader-container">
+      <div class="loader"></div>
+      <p>Cargando SIM-CBC...</p>
+    </div>
+  </div>
+
+  <!-- Reusable OneDrive Modal Hook -->
+  <div id="onedrive-modal-root"></div>
+
+  <!-- Aplicación Principal (ES Module) -->
+  <script type="module" src="./app.js?v=20260721.6"></script>
+</body>
+</html>

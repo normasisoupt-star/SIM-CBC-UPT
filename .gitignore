@@ -1,0 +1,9 @@
+# Archivos temporales y de registros
+*.log
+server_logs.txt
+client_errors.log
+cloudflared.exe
+db_backups/
+*.pyc
+__pycache__/
+.DS_Store
