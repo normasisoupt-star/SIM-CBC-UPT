@@ -268,8 +268,8 @@ export async function renderPlanPage(container, userRole = "admin") {
 
     // Aplicar filtros y búsqueda
     const filtered = programas.filter(p => {
-      const matchSearch = p.nombre.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.codigo.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchSearch = String(p.nombre || "").toLowerCase().includes(String(searchQuery || "").toLowerCase()) || 
+                          String(p.codigo || "").toLowerCase().includes(String(searchQuery || "").toLowerCase());
       const matchFacultad = filterFacultad === "todos" || p.facultad === filterFacultad;
       const matchTipo = filterTipo === "todos" || p.tipo === filterTipo;
       const matchEstado = filterEstado === "todos" || p.estado === filterEstado;
@@ -1738,9 +1738,9 @@ export async function renderPlanPage(container, userRole = "admin") {
     if (!decContainer) return;
 
     const filtered = declaracionesData.filter(d => {
-      const matchSearch = d.programa.toLowerCase().includes(decSearchQuery.toLowerCase()) || 
-                          d.escenario.toLowerCase().includes(decSearchQuery.toLowerCase()) ||
-                          d.cuo.toLowerCase().includes(decSearchQuery.toLowerCase());
+      const matchSearch = String(d.programa || "").toLowerCase().includes(String(decSearchQuery || "").toLowerCase()) || 
+                          String(d.escenario || "").toLowerCase().includes(String(decSearchQuery || "").toLowerCase()) ||
+                          String(d.cuo || "").toLowerCase().includes(String(decSearchQuery || "").toLowerCase());
       const matchFacultad = decFilterFacultad === "todos" || d.facultad === decFilterFacultad;
       const matchAnio = decFilterAnio === "todos" || String(d.anio) === String(decFilterAnio);
       return matchSearch && matchFacultad && matchAnio;
@@ -1927,9 +1927,9 @@ export async function renderPlanPage(container, userRole = "admin") {
               ${sortedStates.map(([state, count]) => {
                 const percentage = totalDec > 0 ? Math.round((count / totalDec) * 100) : 0;
                 let colorClass = "var(--text-400)";
-                if (state.toLowerCase().includes("conforme")) colorClass = "var(--color-cumple)";
-                else if (state.toLowerCase().includes("observado")) colorClass = "var(--color-nocumple)";
-                else if (state.toLowerCase() !== "pendiente") colorClass = "var(--accent-light)";
+                if (String(state || "").toLowerCase().includes("conforme")) colorClass = "var(--color-cumple)";
+                else if (String(state || "").toLowerCase().includes("observado")) colorClass = "var(--color-nocumple)";
+                else if (String(state || "").toLowerCase() !== "pendiente") colorClass = "var(--accent-light)";
                 
                 return `
                   <div>
