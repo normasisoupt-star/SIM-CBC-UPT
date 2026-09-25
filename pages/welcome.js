@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SIGECA - PÁGINA DE BIENVENIDA Y PRESENTACIÓN INSTITUCIONAL (UPT)
+   SIGECA - PÃGINA DE BIENVENIDA Y PRESENTACIÃ“N INSTITUCIONAL (UPT)
    ========================================================================== */
 
 import { renderLoginPage } from "./login.js?v=20260717.1";
@@ -7,7 +7,7 @@ import { renderLoginPage } from "./login.js?v=20260717.1";
 /**
  * Renderiza la pantalla de bienvenida interactiva de la UPT.
  * @param {string} containerId - ID del contenedor HTML de la app
- * @param {function} onLoginSuccess - Callback cuando el inicio de sesión es exitoso
+ * @param {function} onLoginSuccess - Callback cuando el inicio de sesiÃ³n es exitoso
  */
 export function renderWelcomePage(containerId, onLoginSuccess) {
   const container = document.getElementById(containerId);
@@ -23,7 +23,7 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
     }
   };
 
-  // Pre-cargar imágenes asíncronamente con fallback a raíz
+  // Pre-cargar imÃ¡genes asÃ­ncronamente con fallback a raÃ­z
   const bgImg = new Image();
   bgImg.onerror = () => { bgImg.src = "./universidad_privada_de_tacna_bg.jpg"; };
   bgImg.src = "./assets/universidad_privada_de_tacna_bg.jpg";
@@ -49,15 +49,15 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
         
         <!-- Fondo animado interactivo (Video-like Slideshow) -->
         <div class="welcome-slideshow">
-          <div class="slide active" style="background-image: url('./assets/universidad_privada_de_tacna_bg.jpg')"></div>
-          <div class="slide" style="background-image: url('./assets/slide_LABORATORIO-8.jpg')"></div>
-          <div class="slide" style="background-image: url('./assets/slide_SISTEMAS-8.jpg')"></div>
-          <div class="slide" style="background-image: url('./assets/slide_CIVIL-8.jpg')"></div>
-          <div class="slide" style="background-image: url('./assets/slide_MEDICINA-8.jpg')"></div>
-          <div class="slide" style="background-image: url('./assets/slide_ARQUITECTURA-8.jpg')"></div>
+          <div class="slide active" style="background-image: url('./assets/universidad_privada_de_tacna_bg.jpg'), url('./universidad_privada_de_tacna_bg.jpg'), url('./caratula.jpg')"></div>
+          <div class="slide" style="background-image: url('./assets/slide_LABORATORIO-8.jpg'), url('./LABORATORIO-8.png'), url('./assets/LABORATORIO-8.png')"></div>
+          <div class="slide" style="background-image: url('./assets/slide_SISTEMAS-8.jpg'), url('./SISTEMAS-8.png'), url('./assets/SISTEMAS-8.png')"></div>
+          <div class="slide" style="background-image: url('./assets/slide_CIVIL-8.jpg'), url('./CIVIL-8.png'), url('./assets/CIVIL-8.png')"></div>
+          <div class="slide" style="background-image: url('./assets/slide_MEDICINA-8.jpg'), url('./MEDICINA-8.png'), url('./assets/MEDICINA-8.png')"></div>
+          <div class="slide" style="background-image: url('./assets/slide_ARQUITECTURA-8.jpg'), url('./ARQUITECTURA-8.png'), url('./assets/ARQUITECTURA-8.png')"></div>
         </div>
         
-        <!-- Filtros de superposición para contraste y ambiente institucional (Azul Marino) -->
+        <!-- Filtros de superposiciÃ³n para contraste y ambiente institucional (Azul Marino) -->
         <div class="welcome-overlay-gradient"></div>
         <div class="welcome-overlay-vignette"></div>
         <div class="welcome-glow-navy"></div>
@@ -66,7 +66,7 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
         <!-- Contenedor Principal Split-Screen -->
         <div class="welcome-content">
           
-          <!-- Panel Izquierdo: Presentación Institucional e Información de Calidad -->
+          <!-- Panel Izquierdo: PresentaciÃ³n Institucional e InformaciÃ³n de Calidad -->
           <div class="welcome-left-panel">
             
             <!-- Encabezado de Marca UPT (Logo Todo Blanco y Grande, Sin Textos) -->
@@ -76,15 +76,15 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
               </div>
             </div>
 
-            <!-- Presentación del Sistema -->
+            <!-- PresentaciÃ³n del Sistema -->
             <div class="welcome-hero-text">
               <h1 class="welcome-system-title">SIM-CBC</h1>
               <p class="welcome-system-desc">
-                Sistema de Información y Monitoreo de las Condiciones Básicas de Calidad.
+                Sistema de InformaciÃ³n y Monitoreo de las Condiciones BÃ¡sicas de Calidad.
               </p>
             </div>
 
-            <!-- Métricas e Hitos Institucionales Destacados (Diseño Serio e Institucional) -->
+            <!-- MÃ©tricas e Hitos Institucionales Destacados (DiseÃ±o Serio e Institucional) -->
             <div class="welcome-milestones">
               
               <div class="milestone-card">
@@ -93,7 +93,7 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
                 </div>
                 <div class="milestone-details">
                   <span class="milestone-value">Licenciado desde el 2017</span>
-                  <span class="milestone-desc">Condiciones básicas de calidad institucional validadas por la SUNEDU.</span>
+                  <span class="milestone-desc">Condiciones bÃ¡sicas de calidad institucional validadas por la SUNEDU.</span>
                 </div>
               </div>
 
@@ -103,18 +103,18 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
                 </div>
                 <div class="milestone-details">
                   <span class="milestone-value">Puesto 27 del Ranking</span>
-                  <span class="milestone-desc">Ubicada en el ranking de universidades privadas según el IV informe bienal de SUNEDU.</span>
+                  <span class="milestone-desc">Ubicada en el ranking de universidades privadas segÃºn el IV informe bienal de SUNEDU.</span>
                 </div>
               </div>
 
             </div>
 
-            <!-- Oficina de Gestión de la Calidad y Carreras Profesionales -->
+            <!-- Oficina de GestiÃ³n de la Calidad y Carreras Profesionales -->
             <div class="welcome-careers-showcase">
               <div class="quality-office-banner">
                 <div class="quality-office-header">
                   <i data-lucide="line-chart"></i>
-                  <h3>Oficina de Gestión de la Calidad</h3>
+                  <h3>Oficina de GestiÃ³n de la Calidad</h3>
                 </div>
                 <p class="quality-office-slogan">Trabajando por la excelencia y la mejora continua</p>
               </div>
@@ -122,14 +122,14 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
               <h3 class="careers-section-title">Carreras profesionales de la UPT</h3>
               <div class="careers-carousel-container">
                 <div class="careers-track" id="careers-track">
-                  <!-- Se inyectarán dinámicamente -->
+                  <!-- Se inyectarÃ¡n dinÃ¡micamente -->
                 </div>
               </div>
             </div>
 
           </div>
 
-          <!-- Panel Derecho: Formulario de Autenticación Integrado -->
+          <!-- Panel Derecho: Formulario de AutenticaciÃ³n Integrado -->
           <div class="welcome-right-panel">
             <div class="auth-card-wrapper">
               <div class="auth-header-badge">
@@ -184,7 +184,7 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
       track.innerHTML = renderCareers.map((c, index) => `
         <div class="career-card" data-index="${index % careers.length}">
           <div class="career-img-wrapper">
-            <img src="${c.img}" alt="${c.name}" onerror="this.src='./assets/caratula.jpg'">
+            <img src="${c.img}" alt="${c.name}" data-retry="0" onerror="if(this.dataset.retry==='0'){this.dataset.retry='1';this.src=this.src.replace('thumb_','');}else if(this.dataset.retry==='1'){this.dataset.retry='2';this.src=this.src.replace('/assets/','/');}else if(this.dataset.retry==='2'){this.dataset.retry='3';this.src='./caratula.jpg';}">
           </div>
           <span class="career-name">${c.name}</span>
         </div>
@@ -217,7 +217,7 @@ export function renderWelcomePage(containerId, onLoginSuccess) {
       slideInterval = setInterval(nextSlide, 7000);
     }
 
-    // Inicializar slideshow automático
+    // Inicializar slideshow automÃ¡tico
     startSlideshow();
   }
 
