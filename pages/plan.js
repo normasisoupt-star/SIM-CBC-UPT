@@ -268,8 +268,8 @@ export async function renderPlanPage(container, userRole = "admin") {
 
     // Aplicar filtros y búsqueda
     const filtered = programas.filter(p => {
-      const matchSearch = p.nombre.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.codigo.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchSearch = String(p.nombre || "").toLowerCase().includes(String(searchQuery || "").toLowerCase()) || 
+                          String(p.codigo || "").toLowerCase().includes(String(searchQuery || "").toLowerCase());
       const matchFacultad = filterFacultad === "todos" || p.facultad === filterFacultad;
       const matchTipo = filterTipo === "todos" || p.tipo === filterTipo;
       const matchEstado = filterEstado === "todos" || p.estado === filterEstado;
@@ -1738,9 +1738,9 @@ export async function renderPlanPage(container, userRole = "admin") {
     if (!decContainer) return;
 
     const filtered = declaracionesData.filter(d => {
-      const matchSearch = d.programa.toLowerCase().includes(decSearchQuery.toLowerCase()) || 
-                          d.escenario.toLowerCase().includes(decSearchQuery.toLowerCase()) ||
-                          d.cuo.toLowerCase().includes(decSearchQuery.toLowerCase());
+      const matchSearch = String(d.programa || "").toLowerCase().includes(String(decSearchQuery || "").toLowerCase()) || 
+                          String(d.escenario || "").toLowerCase().includes(String(decSearchQuery || "").toLowerCase()) ||
+                          String(d.cuo || "").toLowerCase().includes(String(decSearchQuery || "").toLowerCase());
       const matchFacultad = decFilterFacultad === "todos" || d.facultad === decFilterFacultad;
       const matchAnio = decFilterAnio === "todos" || String(d.anio) === String(decFilterAnio);
       return matchSearch && matchFacultad && matchAnio;
@@ -1774,7 +1774,8 @@ export async function renderPlanPage(container, userRole = "admin") {
                   </tr>
                 ` : filtered.map((d, idx) => {
                   let badgeClass = "inactivo";
-                  const status = d.estado_consolidado.toLowerCase();
+                  const rawStatus = d.estado_consolidado || d.estadoConsolidado || d.estado || d.observaciones || "CONFORME";
+                  const status = String(rawStatus).toLowerCase();
                   if (status.includes("conforme")) {
                     badgeClass = "cumple";
                   } else if (status.includes("observado")) {
@@ -1785,22 +1786,24 @@ export async function renderPlanPage(container, userRole = "admin") {
                     badgeClass = "proceso";
                   }
 
-                  const progValue = parseFloat(d.progreso.replace('%', '')) || 0;
+                  const rawProg = d.progreso || d.progreso_pct || "100%";
+                  const progValue = parseFloat(String(rawProg).replace('%', '')) || 0;
+                  const displayStatus = d.estado_consolidado || d.estado || "CONFORME";
                   
                   return `
                     <tr>
-                      <td>${d.num || (idx + 1)}</td>
-                      <td><strong>${d.facultad}</strong></td>
-                      <td>${d.programa}</td>
-                      <td>${d.escenario}</td>
+                      <td>${d.num || d.nro || (idx + 1)}</td>
+                      <td><strong>${d.facultad || 'UPT'}</strong></td>
+                      <td>${d.programa || 'Programa General'}</td>
+                      <td>${d.escenario || 'General'}</td>
                       <td style="text-align: center;">
                         <span class="badge-status ${badgeClass}" style="display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 4px;">
-                          ${d.estado_consolidado}
+                          ${displayStatus}
                         </span>
                       </td>
                       <td>
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 70px;">
-                          <span style="font-size: 0.75rem; font-weight: 700;">${d.progreso}</span>
+                          <span style="font-size: 0.75rem; font-weight: 700;">${rawProg}</span>
                           <div style="width: 100%; height: 6px; background-color: var(--bg-dark-800); border-radius: 3px; overflow: hidden;">
                             <div style="width: ${progValue}%; height: 100%; background-color: ${progValue === 100 ? '#10B981' : '#3B82F6'}; border-radius: 3px;"></div>
                           </div>
@@ -1823,14 +1826,14 @@ export async function renderPlanPage(container, userRole = "admin") {
       // Calcular estadísticas de declaraciones en tiempo real
       const totalDec = filtered.length;
       
-      const conformesCount = filtered.filter(d => d.estado_consolidado.toLowerCase().includes("conforme")).length;
-      const pendientesCount = filtered.filter(d => d.estado_consolidado.toLowerCase() === "pendiente").length;
+      const conformesCount = filtered.filter(d => String(d.estado_consolidado || d.estado || '').toLowerCase().includes("conforme")).length;
+      const pendientesCount = filtered.filter(d => String(d.estado_consolidado || d.estado || '').toLowerCase() === "pendiente").length;
       const enTramiteCount = totalDec - conformesCount - pendientesCount;
 
       // Agrupación por Estado Consolidado
       const statesMap = {};
       filtered.forEach(d => {
-        const key = d.estado_consolidado;
+        const key = d.estado_consolidado || d.estado || 'Otros';
         statesMap[key] = (statesMap[key] || 0) + 1;
       });
       const sortedStates = Object.entries(statesMap).sort((a, b) => b[1] - a[1]);
@@ -1838,7 +1841,7 @@ export async function renderPlanPage(container, userRole = "admin") {
       // Agrupación por Facultad
       const facsMap = {};
       filtered.forEach(d => {
-        const key = d.facultad;
+        const key = d.facultad || 'UPT';
         facsMap[key] = (facsMap[key] || 0) + 1;
       });
       const sortedFacs = Object.entries(facsMap).sort((a, b) => b[1] - a[1]);
@@ -1846,7 +1849,7 @@ export async function renderPlanPage(container, userRole = "admin") {
       // Agrupación por Escenario
       const escMap = {};
       filtered.forEach(d => {
-        const key = d.escenario;
+        const key = d.escenario || 'General';
         escMap[key] = (escMap[key] || 0) + 1;
       });
       const sortedEscs = Object.entries(escMap).sort((a, b) => b[1] - a[1]);
@@ -1924,9 +1927,9 @@ export async function renderPlanPage(container, userRole = "admin") {
               ${sortedStates.map(([state, count]) => {
                 const percentage = totalDec > 0 ? Math.round((count / totalDec) * 100) : 0;
                 let colorClass = "var(--text-400)";
-                if (state.toLowerCase().includes("conforme")) colorClass = "var(--color-cumple)";
-                else if (state.toLowerCase().includes("observado")) colorClass = "var(--color-nocumple)";
-                else if (state.toLowerCase() !== "pendiente") colorClass = "var(--accent-light)";
+                if (String(state || "").toLowerCase().includes("conforme")) colorClass = "var(--color-cumple)";
+                else if (String(state || "").toLowerCase().includes("observado")) colorClass = "var(--color-nocumple)";
+                else if (String(state || "").toLowerCase() !== "pendiente") colorClass = "var(--accent-light)";
                 
                 return `
                   <div>
