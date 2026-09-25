@@ -1712,17 +1712,22 @@ export async function renderPlanPage(container, userRole = "admin") {
     `;
 
     try {
-      const res = await fetch("/api/declaraciones");
-      const json = await res.json();
-      if (json.status === "success") {
-        declaracionesData = json.data;
-      } else {
-        decContainer.innerHTML = `<div class="card" style="padding: 1.25rem; color: var(--text-300);">Error al cargar: ${json.message}</div>`;
-        return;
+      let res = await fetch("/api/declaraciones").catch(() => null);
+      if (!res || !res.ok) {
+        res = await fetch("./declaraciones_seed.json?v=" + Date.now()).catch(() => null);
+      }
+      if (res && res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json)) {
+          declaracionesData = json;
+        } else if (json.status === "success" && Array.isArray(json.data)) {
+          declaracionesData = json.data;
+        } else if (json.data && Array.isArray(json.data)) {
+          declaracionesData = json.data;
+        }
       }
     } catch (e) {
-      decContainer.innerHTML = `<div class="card" style="padding: 1.25rem; color: var(--text-300);">Error de conexión: ${e.message}</div>`;
-      return;
+      console.warn("Error cargando declaraciones del servidor:", e);
     }
 
     renderDeclaracionesTable();
