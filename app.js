@@ -1,26 +1,26 @@
 /* ==========================================================================
    SIGECA - APLICACIÓN PRINCIPAL & ENRUTADOR (SPA Controller)
    ========================================================================== */
-import { initOneDriveModalListener } from "./components/onedrive-modal.js?v=20260720.1";
-import { db } from "./services/db.js?v=20260720.1";
-import { renderWelcomePage } from "./pages/welcome.js?v=20260720.1";
-import { renderSidebar } from "./components/sidebar.js?v=20260720.1";
-import { renderHeader } from "./components/header.js?v=20260720.1";
+import { initOneDriveModalListener } from "./components/onedrive-modal.js?v=20260925.99";
+import { db } from "./services/db.js?v=20260925.99";
+import { renderWelcomePage } from "./pages/welcome.js?v=20260925.99";
+import { renderSidebar } from "./components/sidebar.js?v=20260925.99";
+import { renderHeader } from "./components/header.js?v=20260925.99";
 
 // Páginas cargadas dinámicamente
-import { renderDashboardPage } from "./pages/dashboard.js?v=20260720.1";
-import { renderMallaPage } from "./pages/malla.js?v=20260720.1";
-import { renderPlanPage } from "./pages/plan.js?v=20260720.1";
-import { renderEvidenciasPage } from "./pages/evidencias.js?v=20260720.18";
+import { renderDashboardPage } from "./pages/dashboard.js?v=20260925.99";
+import { renderMallaPage } from "./pages/malla.js?v=20260925.99";
+import { renderPlanPage } from "./pages/plan.js?v=20260925.99";
+import { renderEvidenciasPage } from "./pages/evidencias.js?v=20260925.99";
 
-import { renderEncuestasPage } from "./pages/encuestas.js?v=20260720.1";
-import { renderPromptsPage } from "./pages/prompts.js?v=20260720.1";
-import { renderUsuariosPage } from "./pages/usuarios.js?v=20260720.1";
-import { renderSolicitudesPage } from "./pages/solicitudes.js?v=20260720.1";
-import { renderAsesorSuneduPage } from "./pages/asesor_sunedu.js?v=20260720.1";
-import { renderMonitoreoPage } from "./pages/monitoreo.js?v=20260720.1";
-import { renderTransparenciaPage } from "./pages/transparencia.js?v=20260721.6";
-import { renderTransparenciaCbcPage } from "./pages/transparencia_cbc.js?v=20260721.5";
+import { renderEncuestasPage } from "./pages/encuestas.js?v=20260925.99";
+import { renderPromptsPage } from "./pages/prompts.js?v=20260925.99";
+import { renderUsuariosPage } from "./pages/usuarios.js?v=20260925.99";
+import { renderSolicitudesPage } from "./pages/solicitudes.js?v=20260925.99";
+import { renderAsesorSuneduPage } from "./pages/asesor_sunedu.js?v=20260925.99";
+import { renderMonitoreoPage } from "./pages/monitoreo.js?v=20260925.99";
+import { renderTransparenciaPage } from "./pages/transparencia.js?v=20260925.99";
+import { renderTransparenciaCbcPage } from "./pages/transparencia_cbc.js?v=20260925.99";
 
 class AppController {
   constructor() {
