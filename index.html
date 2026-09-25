@@ -135,9 +135,17 @@
   <!-- SheetJS for Excel processing in frontend -->
   <script src="./xlsx.full.min.js?v=20260623.5"></script>
   
-  <!-- Preload critical images for instant synchronous display -->
-  <link rel="preload" href="./assets/universidad_privada_de_tacna_logo_transparent.png" as="image">
-  <link rel="preload" href="./assets/universidad_privada_de_tacna_bg.jpg" as="image">
+  <!-- Automatic Fallback Handler for Images -->
+  <script>
+    window.addEventListener('error', function(e) {
+      if (e.target && e.target.tagName === 'IMG' && e.target.src.includes('/assets/')) {
+        const fallbackSrc = e.target.src.replace('/assets/', '/');
+        if (e.target.src !== fallbackSrc) {
+          e.target.src = fallbackSrc;
+        }
+      }
+    }, true);
+  </script>
   
   <!-- Estilos Globales -->
   <link rel="stylesheet" href="./index.css?v=20260720.1">
