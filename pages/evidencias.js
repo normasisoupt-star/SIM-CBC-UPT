@@ -7501,7 +7501,28 @@ const drawEstadisticas = () => {
         `;
         setTimeout(async () => {
           await db.loadFromServer();
-          const newStats = await db.getEstadisticasInstitucionales();
+          let newStats = await db.getEstadisticasInstitucionales();
+          
+          const checkAny = (s) => s && ((s.alumnos_regulares && s.alumnos_regulares.length > 0) ||
+                                  (s.docentes && s.docentes.length > 0) ||
+                                  (s.docentes_renacyt && s.docentes_renacyt.length > 0) ||
+                                  (s.postulantes && s.postulantes.length > 0) ||
+                                  (s.ingresantes && s.ingresantes.length > 0) ||
+                                  (s.egresados && s.egresados.length > 0));
+          
+          if (!checkAny(newStats)) {
+            try {
+              const res = await fetch('./sigeca_db.json?v=' + Date.now()).catch(() => null);
+              if (res && res.ok) {
+                const dbData = await res.json();
+                if (dbData && dbData.estadisticas_institucionales) {
+                  newStats = dbData.estadisticas_institucionales;
+                  await db.saveEstadisticasInstitucionales(newStats);
+                }
+              }
+            } catch (err) {}
+          }
+          
           estadisticasInst = newStats;
           drawEstadisticas();
         }, 100);

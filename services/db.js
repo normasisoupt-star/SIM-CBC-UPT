@@ -1114,11 +1114,14 @@ class DatabaseService {
     localStorage.setItem("sigeca_transparencia_cbc", JSON.stringify(data));
   }
 
-  // Cargar base de datos desde el archivo central en el servidor
+  // Cargar base de datos desde el archivo central en el servidor (o fallback estático)
   async loadFromServer() {
     try {
-      const response = await fetch('/api/db?t=' + Date.now());
-      if (!response.ok) return;
+      let response = await fetch('/api/db?t=' + Date.now()).catch(() => null);
+      if (!response || !response.ok) {
+        response = await fetch('./sigeca_db.json?v=' + Date.now()).catch(() => null);
+      }
+      if (!response || !response.ok) return;
       const data = await response.json();
       if (data && typeof data === 'object' && Object.keys(data).length > 0) {
         // Desactivar el interceptor para evitar bucles durante la carga
